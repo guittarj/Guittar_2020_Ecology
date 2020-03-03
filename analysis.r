@@ -6,7 +6,7 @@
 #### Setup ####
 
 # set working direction
-wd <- 'C:/Users/John/Documents/michigan/seedclim/MS_Transients/Ecology_submissions/Final submission'
+wd <- '[insert working directory]'
 setwd(wd)
 
 # load packages
