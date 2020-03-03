@@ -112,6 +112,7 @@ tmp <- filter(j, !(seed == 0 & germ == 0))
 
 #calculate how many data points occur for each category, useful for later stats
 germ_n <- c(table(tmp$idT), table(tmp$idP))[c(1,2,7,3,4,8,9,5)]
+paste('N =', sum(germ_n))
 
 #transform seed abun data with yeo-johnson transformation from VGAM
 #first find lambda value which maximizes normality
@@ -140,12 +141,12 @@ germS <-      MASS::glm.nb(germ ~ seed_trans + temp * id + precip * id, data = t
 germT <-      MASS::glm.nb(germ ~ seed_trans + temp + precip + idT, data = tmp)
 germP <-      MASS::glm.nb(germ ~ seed_trans + temp + precip + idP, data = tmp)
 
-#REMOVE?
-#calculate how many data points occur for each category, useful for later stats
-est_n <- c(table(tmp$idT), table(tmp$idP))[c(1,2,7,3,4,8,9,5)]
-
 ### GLMs to model individuals established
 tmp <- filter(j, germ > 0)
+
+#calculate how many data points occur for each category, useful for later stats
+est_n <- c(table(tmp$idT), table(tmp$idP))[c(1,2,7,3,4,8,9,5)]
+paste('N =', sum(est_n))
 
 #tranform emergence data to normalize it
 #first calculate best alpha
@@ -286,7 +287,7 @@ ps <- plot_grid(p1, p2, align = 'hv')
 
 fig2_seedsByTemp <- plot_grid(ps, myleg, ncol = 1, rel_heights = c(1, .12))
 
-plot_it(fig2_seedsByTemp, name = 'Fig2_seedsByTemp', dir = "images\\", width = 6, height = 3.25)
+plot_it(fig2_seedsByTemp, name = 'fig2_seedsByTemp', dir = "images\\", width = 6, height = 3.25)
 
 fig2_seedsByTemp
 
@@ -801,8 +802,6 @@ j_trans <- j_den_trans %>%
   full_join(j_site_richness_trans, by = 'stage') %>%
   full_join(j_regional_richness_trans, by = 'stage')
 
-#at some point it would be nice to align this by the plus-minus sign, but currently I can't figure this out. Might need to move to full Latex. I almost had it by adding tildes after the plus-minus sign, but they're not spaced the same as numbers so it looks wonky. Gah!
-
 #custom stage names
 #stage name dictionary
 stage_lvs2 <- c('Seed Rain' = 'rain', 'Seed Bank' = 'bank', 'All Seeds' = 'seed', 'Emerged Seedlings' = 'germ', 'Established Seedlings' = 'est', 'Seeds and Seedlings' = 'seeds.seedlings', 'Adults' = 'mature', 'All Stages' = 'all')
@@ -825,7 +824,7 @@ tableS1_siteStats <- kable(tmp, format = 'latex', booktabs = T, escape = F, alig
     row_spec(0, bold = T) %>%
     group_rows("All individuals", 1, 8) %>%
     group_rows("Individuals of locally-transient species only", 9, 14) %>%
-    footnote(general = 'Densities and species richness values within and across sites for each life stage. The density of "all individuals"" includes unidentified seeds and seedlings. Regional richness is not shown for locally-transient species because locally-transient/locally-persistent species status can vary by site, and thus cannot be summarized in this way across sites.', general_title = "Table S1.", threeparttable = T, title_format = "bold") %>%
+    footnote(general = 'Densities and species richness values within and across sites for each life stage. The density of "all individuals" includes unidentified seeds and seedlings. Regional richness is not shown for locally-transient species because locally-transient/locally-persistent species status can vary by site, and thus cannot be summarized in this way across sites.', general_title = "Table S1.", threeparttable = T, title_format = "bold") %>%
   landscape()
 
 kable_as_image(tableS1_siteStats, filename = "images\\tableS1_siteStats", file_format = 'png', density = 500)

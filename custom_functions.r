@@ -115,8 +115,10 @@ plot_it <- function(plot, name, dir = "", height, width, res = 300) {
   #only works for ggplot. base plot() is dumb
   plot(plot)
   
+  papersize <- ifelse(width < 7.5 & height < 10, 'a4', 
+                ifelse(width < 10 & height < 7.5, 'a4r', 'special'))
   
-  pdf(file = paste0(dir, name, '.pdf'), width = width, height = height)
+  pdf(file = paste0(dir, name, '.pdf'), width = width, height = height, paper = papersize)
   
   #only works for ggplot. base plot() is dumb
   plot(plot)
